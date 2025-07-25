@@ -15,9 +15,6 @@ class FormProcessor extends Controller
     {
         $data = $request->only(['name', 'surname', 'email']);
 
-        return response()->json([
-            'message' => 'Данные успешно получены',
-            'data' => $data
-        ]);
+        return view('greeting', ['name' => $data['name']]);
     }
 }
