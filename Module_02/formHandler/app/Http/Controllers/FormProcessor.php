@@ -10,4 +10,14 @@ class FormProcessor extends Controller
     {
         return view('index');
     }
+
+    public function store(Request $request)
+    {
+        $data = $request->only(['name', 'surname', 'email']);
+
+        return response()->json([
+            'message' => 'Данные успешно получены',
+            'data' => $data
+        ]);
+    }
 }
