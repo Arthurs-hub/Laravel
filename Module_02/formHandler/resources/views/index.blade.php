@@ -70,7 +70,7 @@
     </style>
 </head>
 <body>
-    <form method="POST" action="/store_form">
+    <form method="POST" action=" ">
         @csrf
         <h2>Форма пользователя</h2>
 
