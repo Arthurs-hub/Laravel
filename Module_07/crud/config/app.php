@@ -104,6 +104,7 @@ return [
             explode(',', (string) env('APP_PREVIOUS_KEYS', ''))
         ),
     ],
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -123,4 +124,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    
 ];

@@ -9,4 +9,10 @@ class User extends Model
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'surname',
+        'email',
+    ];
 }
