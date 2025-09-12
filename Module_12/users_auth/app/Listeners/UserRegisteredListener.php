@@ -22,7 +22,6 @@ class UserRegisteredListener
      */
     public function handle(UserRegistered $event): void
     {
-
         Mail::to($event->user->email)->send(new Welcome($event->user));
 
         $text = "Зарегистрирован новый пользователь:\n<b>Имя:</b> {$event->user->name}\n<b>Email:</b> {$event->user->email}";
