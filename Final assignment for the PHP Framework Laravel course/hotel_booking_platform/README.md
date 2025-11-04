@@ -10,6 +10,50 @@ A comprehensive, enterprise-grade hotel booking platform built with Laravel 12, 
 - Composer
 - Node.js & npm
 
+## 📸 Image System - Google Drive Integration
+
+### Automatic Image Display
+The platform uses **Google Drive** to serve all 1200+ hotel and room images automatically. No local image folder is required.
+
+### Image Configuration
+- **Hotel Images**: 200 hotels × 1 image each = 200 images
+- **Room Images**: 200 hotels × 5 rooms each = 1000 images
+- **Total Images**: 1200 images served from Google Drive
+- **No Local Storage**: Images are loaded directly from Google Drive URLs
+- **Zero Setup**: Works immediately after database setup
+
+### Environment Configuration
+Ensure these settings in your `.env` file:
+```env
+USE_EXTERNAL_IMAGES=true
+GOOGLE_DRIVE_BASE_URL="https://lh3.googleusercontent.com/d/"
+```
+
+### Google Drive URL Formats
+The platform supports multiple Google Drive URL formats:
+- **GoogleUserContent** (Recommended): `https://lh3.googleusercontent.com/d/{FILE_ID}`
+- **Standard Drive**: `https://drive.google.com/uc?export=view&id={FILE_ID}`
+- **Thumbnail**: `https://drive.google.com/thumbnail?id={FILE_ID}`
+
+**Note**: GoogleUserContent format (`lh3.googleusercontent.com`) works best for public images.
+
+### How It Works
+1. **Image Helper**: `app/Helpers/ImageHelper.php` generates Google Drive URLs
+2. **Configuration**: `config/images.php` contains all Google Drive file IDs
+3. **Automatic Fallback**: Uses Unsplash images if Google Drive fails
+4. **No Downloads**: Images stream directly from Google Drive
+
+### Image URL Format
+```
+https://lh3.googleusercontent.com/d/{GOOGLE_DRIVE_FILE_ID}
+```
+
+### Supported Countries & Hotels
+- **20 Countries**: Australia, Brazil, Canada, China, France, Germany, India, Italy, Japan, Mexico, Norway, Russia, Singapore, South Korea, Spain, Thailand, Turkey, UAE, United Kingdom, USA
+- **200 Hotels**: 10 hotels per country
+- **1000 Room Images**: 5 room images per hotel
+- **All Images**: Automatically configured and ready to use
+
 ### Step 1: Create Database
 ```sql
 -- Connect to MySQL and create database
@@ -50,7 +94,7 @@ php artisan key:generate
 
 ### Step 5: Populate Database with Sample Data
 ```bash
-# Fill database with hotels, rooms, and facilities only (fulfillment takes up to 3 minutes)
+# Fill database with hotels, rooms, facilities and Arabic translations (fulfillment takes up to 3 minutes)
 php artisan app:quick-setup 
 ```
 
@@ -1510,6 +1554,34 @@ APP_ENV=local  # API test routes enabled
 ### Postman Shows "Loading..." Forever
 **Problem**: Preview tab shows infinite loading  
 **Solution**: Use "Body" or "Pretty" tab instead of "Preview" for JSON responses
+
+### Arabic Translations Not Working
+**Problem**: Hotel descriptions show in Russian instead of Arabic  
+**Solution**: 
+- Run migrations: `php artisan migrate`
+- Run Arabic translations seeder: `php artisan db:seed --class=ArabicTranslationsSeeder`
+- Or run complete setup: `php artisan app:quick-setup`
+
+### Google Drive Images Not Loading
+**Problem**: Hotels show Unsplash fallback images instead of Google Drive images  
+**Solution**: 
+- Verify `.env` settings:
+  ```env
+  USE_EXTERNAL_IMAGES=true
+  GOOGLE_DRIVE_BASE_URL="https://lh3.googleusercontent.com/d/"
+  ```
+- Test image accessibility: Visit `http://localhost:8000/test_images.html`
+- Clear config cache: `php artisan config:clear`
+- Restart server: `php artisan serve`
+- Ensure Google Drive files are publicly accessible
+
+### Google Drive Setup Requirements
+**Problem**: Images not loading from Google Drive  
+**Solution**: 
+1. **Make folder public**: Right-click folder → Share → "Anyone with the link"
+2. **Set permissions**: Choose "Viewer" access for public
+3. **Use correct URL format**: GoogleUserContent format works best
+4. **Test accessibility**: Use the diagnostic page at `/test_images.html`
 
 ## 📄 Educational Purpose Statement
 

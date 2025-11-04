@@ -30,11 +30,17 @@
                 $roomPhotos = $room->room_photos;
             @endphp
             @if(count($roomPhotos) > 0)
-                <img class="w-full h-full object-contain transition-transform duration-300"
-                    style="max-height: 100%; width: auto;" src="{{ $roomPhotos[0] }}" alt="{{ $room->title }}">
+                <img class="w-full h-full object-contain transition-transform duration-300 room-image"
+                    style="max-height: 100%; width: auto;" 
+                    src="{!! $roomPhotos[0] !!}"
+                    alt="{{ $room->title }}"
+                    onerror="this.style.opacity='0.3'; this.style.background='#f8f9fa url(\'data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"%23999\"%3E%3Cpath d=\"M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z\"//%3E%3C/svg%3E\') center/50px no-repeat';">
             @else
-                <img class="w-full h-full object-contain transition-transform duration-300"
-                    style="max-height: 100%; width: auto;" src="{{ $room->poster_url }}" alt="{{ $room->title }}">
+                <img class="w-full h-full object-contain transition-transform duration-300 room-image"
+                    style="max-height: 100%; width: auto;" 
+                    src="{!! $room->image_url !!}"
+                    alt="{{ $room->title }}"
+                    onerror="this.style.opacity='0.3'; this.style.background='#f8f9fa url(\'data:image/svg+xml,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"%23999\"%3E%3Cpath d=\"M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z\"//%3E%3C/svg%3E\') center/50px no-repeat';">
             @endif
         </div>
     </div>

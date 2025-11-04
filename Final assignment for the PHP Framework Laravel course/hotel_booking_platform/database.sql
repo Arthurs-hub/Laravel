@@ -116,37 +116,8 @@ CREATE TABLE `failed_jobs` (
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `hotel_arabic_addresses`;
-
-CREATE TABLE `hotel_arabic_addresses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `english_title` varchar(255) NOT NULL,
-  `arabic_address` varchar(500) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_title` (`english_title`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `hotel_arabic_descriptions`;
-
-CREATE TABLE `hotel_arabic_descriptions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `english_title` varchar(255) NOT NULL,
-  `arabic_description` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_title` (`english_title`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `hotel_translations`;
-
-CREATE TABLE `hotel_translations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `original_title` varchar(255) NOT NULL,
-  `arabic_title` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_original` (`original_title`),
-  UNIQUE KEY `unique_slug` (`slug`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+-- Arabic translation tables are now created via Laravel migrations
+-- See: database/migrations/2025_01_16_000000_create_arabic_translation_tables.php
 
 DROP TABLE IF EXISTS `hotels`;
 
@@ -513,6 +484,15 @@ VALUES
   (
     26,
     '2025_01_15_154810_add_image_url_to_rooms_table',
+    1
+  );
+
+INSERT INTO
+  `migrations` (`id`, `migration`, `batch`)
+VALUES
+  (
+    27,
+    '2025_01_16_000000_create_arabic_translation_tables',
     1
   );
 

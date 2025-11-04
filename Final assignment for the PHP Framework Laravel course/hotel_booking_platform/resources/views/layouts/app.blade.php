@@ -47,28 +47,16 @@
         .bg-gradient-to-br {
             background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
         }
+        
+        /* Простые стили для изображений */
+        .hotel-image, .room-image {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 
 <body class="font-sans antialiased" x-data>
-    <script> 
-        document.addEventListener('DOMContentLoaded', function () {
-            const images = document.querySelectorAll('img[data-src]');
-            const imageObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.dataset.src;
-                        img.classList.remove('opacity-0');
-                        img.classList.add('opacity-100');
-                        observer.unobserve(img);
-                    }
-                });
-            });
 
-            images.forEach(img => imageObserver.observe(img));
-        });
-    </script>
     <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         @include('layouts.navigation')
 

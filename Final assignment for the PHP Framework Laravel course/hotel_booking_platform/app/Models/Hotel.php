@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use App\Helpers\ImageHelper;
 
 class Hotel extends Model
 {
@@ -34,8 +35,9 @@ class Hotel extends Model
     {
         if (App::getLocale() === 'ar') {
             try {
+                $originalTitle = $this->attributes['title'] ?? $this->getOriginal('title');
                 $arabicAddress = \Illuminate\Support\Facades\DB::table('hotel_arabic_addresses')
-                    ->where('english_title', $this->attributes['title'])
+                    ->where('english_title', $originalTitle)
                     ->value('arabic_address');
                 return $arabicAddress ?? $value;
             } catch (\Exception $e) {
@@ -50,7 +52,7 @@ class Hotel extends Model
         if (App::getLocale() === 'ar') {
             try {
                 $arabicDescription = \Illuminate\Support\Facades\DB::table('hotel_arabic_descriptions')
-                    ->where('english_title', $this->attributes['title'])
+                    ->where('english_title', $this->getOriginal('title'))
                     ->value('arabic_description');
                 return $arabicDescription ?? $value;
             } catch (\Exception $e) {
@@ -62,24 +64,17 @@ class Hotel extends Model
 
     public function getPosterUrlAttribute($value)
     {
-        if (!empty($value)) {
-            return $value;
-        }
-
         $countryFolder = strtolower(str_replace(' ', '_', $this->country));
+        // Always use original title from database, not translated
+        $originalTitle = $this->attributes['title'] ?? $this->getOriginal('title') ?? $this->title;
+        
+        // Generate slug to match config keys
+        $hotelSlug = strtolower($originalTitle);
+        $hotelSlug = str_replace(['&', ' and ', ' ', '-', '.', ',', "'", 'ñ'], ['_and_', '_and_', '_', '_', '', '', '', 'n'], $hotelSlug);
+        $hotelSlug = preg_replace('/_{2,}/', '_', $hotelSlug);
+        $hotelSlug = trim($hotelSlug, '_');
 
-        $originalTitle = $this->attributes['title'] ?? $this->title;
-        $hotelFileName = strtolower(str_replace([' ', '&amp;', '&', ',', '.', "'", '-'], ['_', '_and_', '_and_', '', '', '', '_'], $originalTitle));
-        $hotelFileName = preg_replace('/_{2,}/', '_', $hotelFileName);
-        $hotelFileName = trim($hotelFileName, '_');
-
-        $imagePath = "storage/images/hotels/{$countryFolder}/{$hotelFileName}.jpg";
-
-        if (file_exists(public_path($imagePath))) {
-            return asset($imagePath);
-        }
-
-        return 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+        return ImageHelper::getHotelImage($countryFolder, $hotelSlug);
     }
 
     public function rooms()

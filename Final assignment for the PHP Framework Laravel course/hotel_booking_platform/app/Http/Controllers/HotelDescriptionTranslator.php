@@ -1450,6 +1450,11 @@ class HotelDescriptionTranslator
             ]
         ];
 
+        // For Arabic, try to find translation or return a default Arabic message
+        if ($locale === 'ar') {
+            return $translations[$locale][$hotelTitle] ?? 'وصف الفندق غير متوفر باللغة العربية.';
+        }
+        
         return $translations[$locale][$hotelTitle] ?? $description;
     }
 }

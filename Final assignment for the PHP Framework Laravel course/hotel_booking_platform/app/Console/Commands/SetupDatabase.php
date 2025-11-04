@@ -44,9 +44,7 @@ class SetupDatabase extends Command
         $seeders = [
             'FacilitySeeder',
             'HotelSeeder',
-            'HotelTranslationSeeder',
-            'CompleteArabicAddressSeeder',
-            'ArabicDescriptionsSeeder',
+            'CompleteArabicTranslationsSeeder',
             'RoomSeeder',
             'FacilityRoomSeeder'
         ];

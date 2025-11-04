@@ -9,7 +9,7 @@ class AssignManager
 {
     public static function assign($userEmail, $hotelId)
     {
-        $user = User::where('email', $userEmail)->first();
+        $user = User::where('email', '=', $userEmail)->first();
         if (!$user) {
             return "User with email {$userEmail} not found";
         }

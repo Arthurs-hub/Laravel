@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ImageHelper;
 
 class Room extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'hotel_id',
         'title',
         'description',
         'poster_url',
@@ -17,78 +19,40 @@ class Room extends Model
         'floor_area',
         'type',
         'price',
-        'hotel_id',
     ];
 
-    private function transformHotelName($originalTitle)
+    public function getImageUrlAttribute($value)
     {
-        // Используем встроенную функцию PHP для транслитерации
-        $hotelFileName = iconv('UTF-8', 'ASCII//TRANSLIT', $originalTitle);
-        $hotelFileName = strtolower($hotelFileName);
-        $hotelFileName = preg_replace('/[^a-z0-9]+/', '_', $hotelFileName);
-        $hotelFileName = preg_replace('/_{2,}/', '_', $hotelFileName);
-        return trim($hotelFileName, '_');
-    }
-
-    public function getRoomPhotosAttribute()
-    {
-        $hotel = $this->hotel;
-        if (!$hotel)
-            return [];
-
-        $countryFolder = strtolower(str_replace(' ', '_', $hotel->country));
-        $originalTitle = $hotel->attributes['title'] ?? $hotel->title;
-        $hotelFileName = $this->transformHotelName($originalTitle);
-
-        // Определяем номер фото для этого номера (1-5)
-        $roomsInHotel = $hotel->rooms()->count();
-        if ($roomsInHotel > 0) {
-            $roomPosition = $hotel->rooms()->where('id', '<=', $this->id)->count();
-            $roomNumber = (($roomPosition - 1) % 5) + 1;
-        } else {
-            $roomNumber = 1;
-        }
-
-        $imagePath = "images/rooms/{$countryFolder}/{$hotelFileName}/room_{$roomNumber}.jpg";
-        if (file_exists(public_path("storage/{$imagePath}"))) {
-            return [asset("storage/{$imagePath}")];
-        }
-
-        return [];
-    }
-
-    public function getPosterUrlAttribute($value)
-    {
-        if (!empty($this->attributes['image_url'])) {
-            return $this->attributes['image_url'];
-        }
-
         if (!empty($value)) {
             return $value;
         }
 
+        if (!config('images.use_external', true)) {
+            return config('images.fallback.room');
+        }
+
         $hotel = $this->hotel;
-        if (!$hotel)
-            return 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+        if (!$hotel) {
+            return config('images.fallback.room');
+        }
+
         $countryFolder = strtolower(str_replace(' ', '_', $hotel->country));
-        $originalTitle = $hotel->attributes['title'] ?? $hotel->title;
-        $hotelFileName = $this->transformHotelName($originalTitle);
+        $originalTitle = $hotel->attributes['title'] ?? $hotel->getOriginal('title') ?? $hotel->title;
+        
+        $hotelSlug = strtolower($originalTitle);
+        $hotelSlug = str_replace(['&', ' and ', ' ', '-', '.', ',', "'", 'ñ'], ['_and_', '_and_', '_', '_', '', '', '', 'n'], $hotelSlug);
+        $hotelSlug = preg_replace('/_{2,}/', '_', $hotelSlug);
+        $hotelSlug = trim($hotelSlug, '_');
 
-        $roomsInHotel = $hotel->rooms()->count();
-        if ($roomsInHotel > 0) {
-            $roomPosition = $hotel->rooms()->where('id', '<=', $this->id)->count();
-            $roomNumber = (($roomPosition - 1) % 5) + 1;
-        } else {
-            $roomNumber = 1;
-        }
+        // Get room number based on room position within hotel (1-5)
+        $roomsInHotel = Room::where('hotel_id', $hotel->id)->orderBy('id')->pluck('id')->toArray();
+        $roomPosition = array_search($this->id, $roomsInHotel);
+        $roomNumber = ($roomPosition !== false) ? ($roomPosition + 1) : 1;
+        
+        // Ensure room number is between 1-5 (cycle if more than 5 rooms)
+        $roomNumber = (($roomNumber - 1) % 5) + 1;
 
-        $imagePath = "storage/images/rooms/{$countryFolder}/{$hotelFileName}/room_{$roomNumber}.jpg";
-
-        if (file_exists(public_path($imagePath))) {
-            return asset($imagePath);
-        }
-
-        return 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80';
+        return ImageHelper::getRoomImage($countryFolder, $hotelSlug, $roomNumber);
     }
 
     public function hotel()
@@ -96,49 +60,14 @@ class Room extends Model
         return $this->belongsTo(Hotel::class);
     }
 
+    public function facilities()
+    {
+        return $this->belongsToMany(Facility::class);
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
-    }
-
-    public function facilities()
-    {
-        return $this->belongsToMany(Facility::class, 'facility_room');
-    }
-
-    public function isAvailable($startDate = null, $endDate = null)
-    {
-        if (!$startDate || !$endDate) {
-            return !$this->bookings()
-                ->where('finished_at', '>', now())
-                ->exists();
-        }
-
-        return !$this->bookings()
-            ->where(function ($query) use ($startDate, $endDate) {
-                $query->where(function ($q) use ($startDate, $endDate) {
-                    
-                    $q->where('started_at', '<=', $startDate)
-                        ->where('finished_at', '>', $startDate);
-                })->orWhere(function ($q) use ($startDate, $endDate) {
-                    
-                    $q->where('started_at', '<', $endDate)
-                        ->where('finished_at', '>=', $endDate);
-                })->orWhere(function ($q) use ($startDate, $endDate) {
-                    
-                    $q->where('started_at', '>=', $startDate)
-                        ->where('finished_at', '<=', $endDate);
-                });
-            })
-            ->exists();
-    }
-
-    public function getCurrentBooking()
-    {
-        return $this->bookings()
-            ->where('started_at', '<=', now())
-            ->where('finished_at', '>', now())
-            ->first();
     }
 
     public function reviews()
@@ -148,7 +77,39 @@ class Room extends Model
 
     public function getAverageRatingAttribute()
     {
-        return $this->reviews()->approved()->avg('rating') ?? 0;
+        return $this->reviews()->approved()->avg('rating') ?? 4.5;
     }
 
+    public function getRoomPhotosAttribute()
+    {
+        return [$this->image_url];
+    }
+
+    public function isAvailable($startDate = null, $endDate = null)
+    {
+        if (!$startDate || !$endDate) {
+            return true;
+        }
+
+        return !$this->bookings()
+            ->where('status', '!=', 'cancelled')
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('started_at', [$startDate, $endDate])
+                      ->orWhereBetween('finished_at', [$startDate, $endDate])
+                      ->orWhere(function ($q) use ($startDate, $endDate) {
+                          $q->where('started_at', '<=', $startDate)
+                            ->where('finished_at', '>=', $endDate);
+                      });
+            })
+            ->exists();
+    }
+
+    public function getCurrentBooking()
+    {
+        return $this->bookings()
+            ->where('status', '!=', 'cancelled')
+            ->where('started_at', '<=', now())
+            ->where('finished_at', '>=', now())
+            ->first();
+    }
 }
