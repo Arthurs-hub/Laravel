@@ -28,31 +28,33 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Check-in Date -->
                             <div>
-                                <label for="started_at" class="block text-sm font-medium text-gray-700">
-                                    {{ __('booking.check_in_date') }}
+                                <label for="started_at" class="block text-sm font-medium text-gray-700 mb-2">
+                                    📅 {{ __('booking.check_in_date') }}
                                 </label>
                                 <input type="date" id="started_at" name="started_at"
                                     value="{{ old('started_at', $booking->started_at->format('Y-m-d')) }}"
                                     min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 date-input"
+                                    data-placeholder="{{ __('booking.select_check_in_date') }}"
                                     required>
                                 @error('started_at')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Check-out Date -->
                             <div>
-                                <label for="finished_at" class="block text-sm font-medium text-gray-700">
-                                    {{ __('booking.check_out_date') }}
+                                <label for="finished_at" class="block text-sm font-medium text-gray-700 mb-2">
+                                    📅 {{ __('booking.check_out_date') }}
                                 </label>
                                 <input type="date" id="finished_at" name="finished_at"
                                     value="{{ old('finished_at', $booking->finished_at->format('Y-m-d')) }}"
                                     min="{{ date('Y-m-d', strtotime('+2 days')) }}"
-                                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 date-input"
+                                    data-placeholder="{{ __('booking.select_check_out_date') }}"
                                     required>
                                 @error('finished_at')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
@@ -133,6 +135,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

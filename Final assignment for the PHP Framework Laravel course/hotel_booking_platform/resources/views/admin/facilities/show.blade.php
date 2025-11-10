@@ -20,7 +20,7 @@
 
                     <div>
                         <label class="text-sm font-medium text-gray-500">{{ __('admin.title') }}</label>
-                        <p class="text-lg text-gray-900">{{ $facility->title }}</p>
+                        <p class="text-lg text-gray-900">{{ __($facility->title) }}</p>
                     </div>
 
                     <div>

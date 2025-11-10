@@ -1103,9 +1103,193 @@ PUT /api/manager/bookings/1
 }
 ```
 
+### 🛠️ Facilities Management API
+
+**⚠️ Admin/Manager Role Required**: All endpoints below require user role to be 'admin' or 'manager'
+
+#### 39. Get All Facilities (Admin/Manager)
+```http
+GET /api/admin/facilities
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 1,
+            "title": "Wi-Fi",
+            "created_at": "2025-01-15T10:30:00.000000Z",
+            "updated_at": "2025-01-15T10:30:00.000000Z"
+        },
+        {
+            "id": 2,
+            "title": "Parking",
+            "created_at": "2025-01-15T10:30:00.000000Z",
+            "updated_at": "2025-01-15T10:30:00.000000Z"
+        }
+    ]
+}
+```
+
+#### 40. Create Facility (Admin/Manager)
+```http
+POST /api/admin/facilities
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`, `Content-Type: application/json`
+
+**Request Body**:
+```json
+{
+    "title": "Swimming Pool"
+}
+```
+
+**Response (Success 201)**:
+```json
+{
+    "success": true,
+    "message": "Facility created successfully",
+    "data": {
+        "id": 25,
+        "title": "Swimming Pool",
+        "created_at": "2025-01-15T10:30:00.000000Z",
+        "updated_at": "2025-01-15T10:30:00.000000Z"
+    }
+}
+```
+
+#### 41. Get Facility Details (Admin/Manager)
+```http
+GET /api/admin/facilities/25
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "data": {
+        "id": 25,
+        "title": "Swimming Pool",
+        "created_at": "2025-01-15T10:30:00.000000Z",
+        "updated_at": "2025-01-15T10:30:00.000000Z"
+    }
+}
+```
+
+#### 42. Update Facility (Admin/Manager)
+```http
+PUT /api/admin/facilities/25
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`, `Content-Type: application/json`
+
+**Request Body**:
+```json
+{
+    "title": "Outdoor Swimming Pool"
+}
+```
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "message": "Facility updated successfully",
+    "data": {
+        "id": 25,
+        "title": "Outdoor Swimming Pool",
+        "created_at": "2025-01-15T10:30:00.000000Z",
+        "updated_at": "2025-01-15T12:45:00.000000Z"
+    }
+}
+```
+
+#### 43. Delete Facility (Admin/Manager)
+```http
+DELETE /api/admin/facilities/25
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "message": "Facility deleted successfully"
+}
+```
+
+### 📋 Admin Booking Management API
+
+**⚠️ Admin Role Required**: All endpoints below require user role to be 'admin'
+
+#### 44. Update Booking Status (Admin)
+```http
+PUT /api/admin/bookings/1
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`, `Content-Type: application/json`
+
+**Request Body**:
+```json
+{
+    "status": "confirmed"
+}
+```
+
+**Available Status Values**:
+- `pending` - Booking awaiting approval
+- `confirmed` - Booking is confirmed
+- `cancelled` - Booking is cancelled
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "message": "Booking updated successfully"
+}
+```
+
+#### 45. Approve Booking (Admin)
+```http
+POST /api/admin/bookings/1/approve
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "message": "Booking approved successfully"
+}
+```
+
+#### 46. Delete Booking (Admin)
+```http
+DELETE /api/admin/bookings/1
+```
+**Authentication**: Required (admin role)  
+**Headers**: `Accept: application/json`
+
+**Response (Success 200)**:
+```json
+{
+    "success": true,
+    "message": "Booking deleted successfully"
+}
+```
+
 ### 🔧 Utility API
 
-#### 39. Update User Timezone
+#### 47. Update User Timezone
 ```http
 POST /api/update-timezone
 ```
@@ -1126,7 +1310,7 @@ POST /api/update-timezone
 }
 ```
 
-#### 40. Get Current User
+#### 48. Get Current User
 ```http
 GET /api/user
 ```
@@ -1464,6 +1648,219 @@ Import this JSON into Postman:
 - **Testing**: PHPUnit with comprehensive test coverage
 - **Caching**: Redis/File-based caching system
 - **Email**: Laravel Mail with queue support
+
+## 🧪 Complete Testing Guide
+
+### API Endpoints Testing
+
+#### Facilities Management API
+
+##### Get All Facilities
+```http
+GET /api/facilities
+Accept: application/json
+```
+
+##### Get Specific Facility
+```http
+GET /api/facilities/{id}
+Accept: application/json
+```
+
+##### Create New Facility
+```http
+POST /api/facilities
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "New Facility"
+}
+```
+
+##### Update Facility
+```http
+PUT /api/facilities/{id}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "Updated Facility Name"
+}
+```
+
+##### Delete Facility
+```http
+DELETE /api/facilities/{id}
+Accept: application/json
+```
+
+#### Bookings Management API
+
+##### Get All Bookings
+```http
+GET /api/bookings
+Accept: application/json
+```
+
+##### Get Specific Booking
+```http
+GET /api/bookings/{id}
+Accept: application/json
+```
+
+##### Create New Booking
+```http
+POST /api/bookings
+Content-Type: application/json
+Accept: application/json
+
+{
+    "room_id": 1,
+    "user_id": 1,
+    "check_in_date": "2024-12-01",
+    "check_out_date": "2024-12-05",
+    "total_price": 500.00,
+    "status": "confirmed"
+}
+```
+
+##### Update Booking
+```http
+PUT /api/bookings/{id}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "status": "cancelled"
+}
+```
+
+##### Delete Booking
+```http
+DELETE /api/bookings/{id}
+Accept: application/json
+```
+
+### Web Interface Testing
+
+#### Admin Panel - Facilities Management
+- **List**: `GET /admin/facilities`
+- **Create**: `GET /admin/facilities/create`
+- **Store**: `POST /admin/facilities`
+- **Show**: `GET /admin/facilities/{id}`
+- **Edit**: `GET /admin/facilities/{id}/edit`
+- **Update**: `PUT /admin/facilities/{id}`
+- **Delete**: `DELETE /admin/facilities/{id}`
+
+#### Admin Panel - Bookings Management
+- **List**: `GET /admin/bookings`
+- **Create**: `GET /admin/bookings/create`
+- **Store**: `POST /admin/bookings`
+- **Show**: `GET /admin/bookings/{id}`
+- **Edit**: `GET /admin/bookings/{id}/edit`
+- **Update**: `PUT /admin/bookings/{id}`
+- **Delete**: `DELETE /admin/bookings/{id}`
+
+#### Manager Panel - Facilities Management
+- **List**: `GET /manager/facilities`
+- **Create**: `GET /manager/facilities/create`
+- **Store**: `POST /manager/facilities`
+- **Show**: `GET /manager/facilities/{id}`
+- **Edit**: `GET /manager/facilities/{id}/edit`
+- **Update**: `PUT /manager/facilities/{id}`
+- **Delete**: `DELETE /manager/facilities/{id}`
+
+#### Manager Panel - Bookings Management
+- **List**: `GET /manager/bookings`
+- **Create**: `GET /manager/bookings/create`
+- **Store**: `POST /manager/bookings`
+- **Show**: `GET /manager/bookings/{id}`
+- **Edit**: `GET /manager/bookings/{id}/edit`
+- **Update**: `PUT /manager/bookings/{id}`
+- **Delete**: `DELETE /manager/bookings/{id}`
+
+### Postman/Insomnia Setup
+
+#### Basic Configuration
+- **Base URL**: `http://localhost:8000`
+- **API Headers**:
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+#### Postman Collection Setup
+
+1. Create new collection "Hotel Booking API"
+2. Add environment variable `base_url` = `http://localhost:8000`
+3. Create folders:
+   - Facilities Management
+   - Bookings Management
+
+#### Sample Test Data
+
+##### For Creating Facility:
+```json
+{
+    "title": "Free Wi-Fi"
+}
+```
+
+##### For Creating Booking:
+```json
+{
+    "room_id": 1,
+    "user_id": 1,
+    "check_in_date": "2024-12-01",
+    "check_out_date": "2024-12-05",
+    "total_price": 500.00,
+    "status": "confirmed"
+}
+```
+
+### Validation Testing
+
+#### Invalid Facility Data:
+```json
+{
+    "title": ""
+}
+```
+Expected Response: 422 Unprocessable Entity
+
+#### Invalid Booking Data:
+```json
+{
+    "room_id": "invalid",
+    "check_in_date": "invalid-date",
+    "total_price": -100
+}
+```
+Expected Response: 422 Unprocessable Entity
+
+### Error Testing
+
+#### 404 Not Found
+- Request non-existent ID: `GET /api/facilities/999999`
+
+#### 500 Internal Server Error
+- Can be simulated by sending incorrect data to database
+
+### Automated Testing
+
+#### Run PHPUnit Tests
+```bash
+php artisan test
+```
+
+#### Run Specific Test
+```bash
+php artisan test --filter FacilityTest
+```
+
+#### Run with Code Coverage
+```bash
+php artisan test --coverage
+```
 
 ## 🌍 Multi-Language Support
 

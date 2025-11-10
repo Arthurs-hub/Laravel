@@ -103,15 +103,19 @@ Route::middleware(['auth', 'two-factor'])->get('/dashboard', function () {
 })->name('dashboard');
 
 
-Route::middleware(['auth', 'two-factor', 'manager'])->prefix('manager')->name('manager.')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\ManagerDashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth', 'two-factor'])->prefix('manager')->name('manager.')->group(function () {
+    Route::middleware('manager')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\ManagerDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('facilities', \App\Http\Controllers\Manager\FacilityController::class);
+    });
 });
 
 Route::middleware(['auth', 'two-factor', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('hotels', AdminHotelController::class);
     Route::resource('rooms', AdminRoomController::class);
-    Route::resource('bookings', AdminBookingController::class)->only(['index', 'show']);
+    Route::resource('bookings', AdminBookingController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::post('/bookings/{booking}/approve', [AdminBookingController::class, 'approve'])->name('bookings.approve');
     Route::resource('users', AdminUserController::class);
     Route::resource('facilities', AdminFacilityController::class);
 

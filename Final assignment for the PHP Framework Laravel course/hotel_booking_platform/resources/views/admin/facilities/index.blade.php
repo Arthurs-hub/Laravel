@@ -38,7 +38,7 @@
                             @foreach($facilities as $facility)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ $facility->id }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $facility->title }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ __($facility->title) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-3">
                                             <a href="{{ route('admin.facilities.show', $facility) }}"

@@ -33,7 +33,7 @@ class ManagerTest extends TestCase
         $manager = User::factory()->create(['role' => 'manager']);
 
         $response = $this->actingAs($manager)
-            ->get(route('manager.dashboard'));
+            ->getJson(route('manager.dashboard'));
 
         $response->assertStatus(403);
     }

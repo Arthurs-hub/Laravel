@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\Booking;
 use App\Models\User;
 use App\Models\Review;
+use App\Models\Facility;
 
 
 class DashboardController extends Controller
@@ -20,6 +21,7 @@ class DashboardController extends Controller
             'bookings_count' => Booking::count(),
             'users_count' => User::where('role', 'user')->count(),
             'reviews_count' => Review::count(),
+            'facilities_count' => Facility::count(),
             'total_revenue' => Booking::sum('price'),
         ];
 

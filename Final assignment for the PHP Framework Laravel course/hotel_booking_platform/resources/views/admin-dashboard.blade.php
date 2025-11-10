@@ -183,6 +183,38 @@
                     </div>
                 </a>
 
+                <a href="{{ route('admin.facilities.index') }}"
+                    class="group relative bg-gradient-to-br from-rose-500/20 to-pink-500/20 backdrop-blur-sm rounded-3xl p-4 lg:p-6 xl:p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-rose-500/25">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-pink-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                    </div>
+                    <div class="relative">
+                        <!-- Мобильная версия -->
+                        <div class="flex items-center justify-between mb-2 lg:mb-4 lg:hidden">
+                            <div class="p-2 bg-gradient-to-br from-rose-500 to-pink-500 rounded-xl shadow-lg">
+                                <span class="text-xl">🛠️</span>
+                            </div>
+                            <div class="text-right min-w-0 flex-1 ml-2">
+                                <p class="text-rose-300 font-medium text-xs truncate">{{ __('admin.facilities') }}</p>
+                                <p class="text-2xl font-black text-black truncate">{{ $stats['facilities_count'] ?? 0 }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Десктопная версия -->
+                        <div class="hidden lg:flex lg:flex-col lg:items-center lg:text-center">
+                            <div class="p-4 xl:p-6 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl shadow-lg mb-4">
+                                <span class="text-4xl xl:text-5xl">🛠️</span>
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-rose-300 font-medium text-sm xl:text-base">{{ __('admin.facilities') }}</p>
+                                <p class="text-3xl xl:text-4xl font-black text-black">{{ $stats['facilities_count'] ?? 0 }}</p>
+                                <p class="text-xs xl:text-sm text-gray-300 opacity-75">{{ __('admin.manage_facilities') }}</p>
+                            </div>
+                        </div>
+                        <div class="h-1 bg-gradient-to-r from-rose-500 to-pink-500 rounded-full"></div>
+                    </div>
+                </a>
+
                 <a href="{{ route('admin.system.status') }}"
                     class="group relative bg-gradient-to-br from-indigo-500/20 to-violet-500/20 backdrop-blur-sm rounded-3xl p-4 lg:p-6 xl:p-8 border border-white/10 hover:border-white/20 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-indigo-500/25">
                     <div

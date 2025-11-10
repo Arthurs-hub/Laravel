@@ -70,6 +70,10 @@ class ReviewManagementTest extends TestCase
     {
         $manager1 = User::factory()->create(['role' => 'manager']);
         $manager2 = User::factory()->create(['role' => 'manager']);
+        
+        // Give manager1 their own hotel so they can access manager routes
+        Hotel::factory()->create(['manager_id' => $manager1->id]);
+        
         $hotel = Hotel::factory()->create(['manager_id' => $manager2->id]);
         $review = Review::factory()->create([
             'reviewable_type' => Hotel::class,

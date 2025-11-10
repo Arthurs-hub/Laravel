@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HotelController;
+use App\Http\Controllers\Api\FacilityController as ApiFacilityController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -24,12 +25,8 @@ if (app()->environment(['local', 'testing'])) {
 Route::get('/hotels', [HotelController::class, 'index']);
 Route::get('/hotels/{hotel}', [HotelController::class, 'show']);
 Route::get('/countries', [HotelController::class, 'countries']);
-Route::get('/facilities', function () {
-    return response()->json([
-        'success' => true,
-        'data' => \App\Models\Facility::select('id', 'title', 'icon')->orderBy('title')->get()
-    ]);
-});
+Route::get('/facilities', [ApiFacilityController::class, 'index']);
+Route::get('/facilities/{facility}', [ApiFacilityController::class, 'show']);
 
 Route::middleware('web')->group(function () {
     Route::get('/profile', function () {
@@ -133,7 +130,13 @@ Route::middleware('web')->group(function () {
         ]);
     });
 
-    Route::middleware('admin')->prefix('admin')->group(function () {
+});
+
+Route::middleware('web')->group(function () {
+    // Admin API routes
+    Route::middleware(\App\Http\Middleware\ApiAdminMiddleware::class)->prefix('admin')->group(function () {
+        // Facility API routes
+        Route::resource('facilities', ApiFacilityController::class);
         Route::get('/users', function () {
             $users = \App\Models\User::select('id', 'full_name', 'email', 'role', 'created_at')
                 ->orderBy('created_at', 'desc')
@@ -265,8 +268,27 @@ Route::middleware('web')->group(function () {
             ];
             return response()->json(['success' => true, 'data' => $stats]);
         });
+        
+        // Admin booking management routes
+        Route::put('/bookings/{booking}', function (Request $request, \App\Models\Booking $booking) {
+            $request->validate(['status' => 'required|in:confirmed,cancelled,pending']);
+            $booking->update(['status' => $request->status]);
+            return response()->json(['success' => true, 'message' => 'Booking updated successfully']);
+        });
+        
+        Route::post('/bookings/{booking}/approve', function (\App\Models\Booking $booking) {
+            $booking->update(['status' => 'confirmed']);
+            return response()->json(['success' => true, 'message' => 'Booking approved successfully']);
+        });
+        
+        Route::delete('/bookings/{booking}', function (\App\Models\Booking $booking) {
+            $booking->delete();
+            return response()->json(['success' => true, 'message' => 'Booking deleted successfully']);
+        });
     });
+});
 
+Route::middleware('web')->group(function () {
     Route::middleware('manager')->prefix('manager')->group(function () {
         Route::get('/hotels', function () {
             $hotels = \App\Models\Hotel::where('manager_id', auth()->id())

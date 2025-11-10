@@ -249,4 +249,55 @@
         box-sizing: border-box;
     }
 
+    /* Date input styles */
+    .date-input {
+        position: relative;
+    }
+    
+    .date-input::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        opacity: 0.7;
+        width: 20px;
+        height: 20px;
+    }
+    
+    .date-input::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+    
+    .date-input:invalid {
+        color: #9CA3AF;
+    }
+    
+    .date-input:invalid::-webkit-datetime-edit {
+        color: transparent;
+    }
+    
+    .date-input:invalid::before {
+        content: attr(data-placeholder);
+        color: #9CA3AF;
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 1.125rem;
+        z-index: 1;
+    }
+    
+    .date-input:focus:invalid::before,
+    .date-input:valid::before {
+        display: none;
+    }
+    
+    /* Hide duplicate calendar icons */
+    .date-input::-webkit-inner-spin-button,
+    .date-input::-webkit-clear-button {
+        display: none;
+    }
+
 }

@@ -451,3 +451,301 @@ npm run build
 - **Тестирование**: Запустите `php artisan test` для комплексного набора тестов
 
 ---
+
+## 🧪 Полное Руководство по Тестированию
+
+### Тестирование API Эндпоинтов
+
+#### Управление Удобствами (Facilities Management)
+
+##### Получить Все Удобства
+```http
+GET /api/facilities
+Accept: application/json
+```
+
+##### Получить Конкретное Удобство
+```http
+GET /api/facilities/{id}
+Accept: application/json
+```
+
+##### Создать Новое Удобство
+```http
+POST /api/facilities
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "Новое удобство"
+}
+```
+
+##### Обновить Удобство
+```http
+PUT /api/facilities/{id}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "title": "Обновленное название"
+}
+```
+
+##### Удалить Удобство
+```http
+DELETE /api/facilities/{id}
+Accept: application/json
+```
+
+#### Управление Бронированиями (Bookings Management)
+
+##### Получить Все Бронирования
+```http
+GET /api/bookings
+Accept: application/json
+```
+
+##### Получить Конкретное Бронирование
+```http
+GET /api/bookings/{id}
+Accept: application/json
+```
+
+##### Создать Новое Бронирование
+```http
+POST /api/bookings
+Content-Type: application/json
+Accept: application/json
+
+{
+    "room_id": 1,
+    "user_id": 1,
+    "check_in_date": "2024-12-01",
+    "check_out_date": "2024-12-05",
+    "total_price": 500.00,
+    "status": "confirmed"
+}
+```
+
+##### Обновить Бронирование
+```http
+PUT /api/bookings/{id}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "status": "cancelled"
+}
+```
+
+##### Удалить Бронирование
+```http
+DELETE /api/bookings/{id}
+Accept: application/json
+```
+
+### Тестирование Веб-Интерфейса
+
+### Панель Администратора - Управление Удобствами
+
+1. **Список Удобств**: `GET /admin/facilities`
+2. **Создание Удобства**: `GET /admin/facilities/create`
+3. **Сохранение Удобства**: `POST /admin/facilities`
+4. **Просмотр Удобства**: `GET /admin/facilities/{id}`
+5. **Редактирование Удобства**: `GET /admin/facilities/{id}/edit`
+6. **Обновление Удобства**: `PUT /admin/facilities/{id}`
+7. **Удаление Удобства**: `DELETE /admin/facilities/{id}`
+
+### Панель Менеджера - Управление Удобствами
+
+1. **Список Удобств**: `GET /manager/facilities`
+2. **Создание Удобства**: `GET /manager/facilities/create`
+3. **Сохранение Удобства**: `POST /manager/facilities`
+4. **Просмотр Удобства**: `GET /manager/facilities/{id}`
+5. **Редактирование Удобства**: `GET /manager/facilities/{id}/edit`
+6. **Обновление Удобства**: `PUT /manager/facilities/{id}`
+7. **Удаление Удобства**: `DELETE /manager/facilities/{id}`
+
+### Панель Администратора - Управление Бронированиями
+
+1. **Список Бронирований**: `GET /admin/bookings`
+2. **Создание Бронирования**: `GET /admin/bookings/create`
+3. **Сохранение Бронирования**: `POST /admin/bookings`
+4. **Просмотр Бронирования**: `GET /admin/bookings/{id}`
+5. **Редактирование Бронирования**: `GET /admin/bookings/{id}/edit`
+6. **Обновление Бронирования**: `PUT /admin/bookings/{id}`
+7. **Удаление Бронирования**: `DELETE /admin/bookings/{id}`
+
+### Панель Менеджера - Управление Бронированиями
+
+1. **Список Бронирований**: `GET /manager/bookings`
+2. **Создание Бронирования**: `GET /manager/bookings/create`
+3. **Сохранение Бронирования**: `POST /manager/bookings`
+4. **Просмотр Бронирования**: `GET /manager/bookings/{id}`
+5. **Редактирование Бронирования**: `GET /manager/bookings/{id}/edit`
+6. **Обновление Бронирования**: `PUT /manager/bookings/{id}`
+7. **Удаление Бронирования**: `DELETE /manager/bookings/{id}`
+
+### Настройка Postman/Insomnia
+
+#### Базовые Настройки
+- **Base URL**: `http://localhost:8000`
+- **Заголовки для API**:
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+#### Настройка Коллекции Postman
+
+1. Создайте новую коллекцию "Hotel Booking API"
+2. Добавьте переменную окружения `base_url` = `http://localhost:8000`
+3. Создайте папки:
+   - Facilities Management
+   - Bookings Management
+
+#### Примеры Тестовых Данных
+
+##### Для создания удобства:
+```json
+{
+    "title": "Бесплатный Wi-Fi"
+}
+```
+
+##### Для создания бронирования:
+```json
+{
+    "room_id": 1,
+    "user_id": 1,
+    "check_in_date": "2024-12-01",
+    "check_out_date": "2024-12-05",
+    "total_price": 500.00,
+    "status": "confirmed"
+}
+```
+
+### Тестирование Валидации
+
+#### Невалидные данные для удобства:
+```json
+{
+    "title": ""
+}
+```
+Ожидаемый ответ: 422 Unprocessable Entity
+
+#### Невалидные данные для бронирования:
+```json
+{
+    "room_id": "invalid",
+    "check_in_date": "invalid-date",
+    "total_price": -100
+}
+```
+Ожидаемый ответ: 422 Unprocessable Entity
+
+#### Управление Бронированиями (Администратор)
+
+##### Одобрение Бронирования
+```http
+PATCH /admin/bookings/{id}/approve
+Content-Type: application/json
+Accept: application/json
+```
+
+**Тестирование в Postman/Insomnia:**
+- URL: `http://localhost:8000/admin/bookings/1/approve`
+- Метод: PATCH
+- Headers: `Accept: application/json`
+- Ожидаемый ответ: `{"message": "Booking approved successfully", "booking": {...}}`
+
+##### Обновление Бронирования (Администратор)
+```http
+PUT /admin/bookings/{id}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "check_in": "2024-12-01",
+    "check_out": "2024-12-05",
+    "status": "confirmed"
+}
+```
+
+**Тестирование в Postman/Insomnia:**
+- URL: `http://localhost:8000/admin/bookings/1`
+- Метод: PUT
+- Headers: `Accept: application/json`, `Content-Type: application/json`
+- Body: JSON с полями для обновления
+- Ожидаемый ответ: `{"message": "Booking updated successfully", "booking": {...}}`
+
+##### Удаление Бронирования (Администратор)
+```http
+DELETE /admin/bookings/{id}
+Content-Type: application/json
+Accept: application/json
+```
+
+**Тестирование в Postman/Insomnia:**
+- URL: `http://localhost:8000/admin/bookings/1`
+- Метод: DELETE
+- Headers: `Accept: application/json`
+- Ожидаемый ответ: `{"message": "Booking deleted successfully"}`
+
+### Тестирование Ошибок
+
+#### 404 Not Found
+- Запросите несуществующий ID: `GET /api/facilities/999999`
+
+#### 500 Internal Server Error
+- Можно симулировать, отправив некорректные данные в базу
+
+### Автоматизированное Тестирование
+
+#### Запуск PHPUnit Тестов
+```bash
+php artisan test
+```
+
+#### Запуск Конкретного Теста
+```bash
+php artisan test --filter FacilityTest
+```
+
+#### Запуск с Покрытием Кода
+```bash
+php artisan test --coverage
+```
+
+### Быстрый Поток Тестирования
+
+#### 1. Тестирование Аутентификации (Только Локально)
+```
+POST http://localhost:8000/api/register
+POST http://localhost:8000/api/login
+POST http://localhost:8000/api/logout
+```
+
+#### 2. Тестирование Публичного API
+```
+GET http://localhost:8000/api/hotels
+GET http://localhost:8000/api/hotels/1
+GET http://localhost:8000/api/countries
+```
+
+#### 3. Тестирование Проверки Доступности
+```
+POST http://localhost:8000/api/rooms/check-availability
+Body: {"room_id": 1, "started_at": "2025-12-01", "finished_at": "2025-12-05"}
+```
+
+### Инструкции по Настройке
+
+1. **Базовый URL**: Установите как переменную окружения `{{base_url}}` = `http://localhost:8000`
+2. **Заголовки**:
+   - `Accept: application/json`
+   - `Content-Type: application/json` или `application/x-www-form-urlencoded`
+3. **Аутентификация**: Используйте токены сессии или API токены
+4. **Тестирование CRUD операций**: Протестируйте все операции Create, Read, Update, Delete
+5. **Проверка Валидации**: Отправьте неверные данные для проверки валидации
+6. **Тестирование Ошибок**: Проверьте обработку ошибок 404, 422, 500

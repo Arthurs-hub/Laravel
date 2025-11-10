@@ -45,5 +45,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\AdminMiddleware::class,
         'manager' => \App\Http\Middleware\ManagerMiddleware::class,
         'two-factor' => \App\Http\Middleware\TwoFactorMiddleware::class,
+        'api.admin' => \App\Http\Middleware\ApiAdminMiddleware::class,
     ];
 }

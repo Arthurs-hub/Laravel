@@ -94,7 +94,13 @@ class ReviewController extends Controller
     private function storeReview(Request $request, $object, $type)
     {
         if (!Auth::check()) {
-            return response()->json(['error' => __('reviews.login_required')], 401);
+            if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => __('reviews.login_required')
+                ], 401);
+            }
+            return redirect()->route('login')->with('error', __('reviews.login_required'));
         }
 
         $request->validate([
@@ -193,7 +199,13 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return response()->json(['error' => __('reviews.login_required')], 401);
+            if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'error' => __('reviews.login_required')
+                ], 401);
+            }
+            return redirect()->route('login')->with('error', __('reviews.login_required'));
         }
 
         $request->validate([

@@ -45,6 +45,8 @@ class MiddlewareTest extends TestCase
     public function test_admin_can_access_manager_dashboard()
     {
         $admin = User::factory()->create(['role' => 'admin']);
+        // Admin needs a hotel assignment to access manager routes
+        Hotel::factory()->create(['manager_id' => $admin->id]);
 
         $response = $this->actingAs($admin)
             ->get(route('manager.dashboard'));

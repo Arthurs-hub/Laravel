@@ -180,6 +180,12 @@
 </style>
 
 <script>
+    // Store translated messages
+    const translations = {
+        loginRequired: '{{ __('reviews.login_required') }}',
+        errorOccurred: '{{ __('An error occurred') }}'
+    };
+    
     document.addEventListener('DOMContentLoaded', function () {
         // View Reviews functionality
         document.querySelectorAll('.review-view-btn').forEach(button => {
@@ -273,15 +279,34 @@
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
                 }
             })
                 .then(response => {
                     console.log('Submit response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    console.log('Content-Type:', response.headers.get('content-type'));
+                    
+                    // Check if response is JSON
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json().then(data => {
+                            console.log('JSON response data:', data);
+                            if (!response.ok) {
+                                // Handle JSON error responses
+                                console.log('Error from server:', data.error);
+                                throw new Error(data.error || translations.errorOccurred);
+                            }
+                            return data;
+                        });
+                    } else {
+                        // If not JSON, it's likely an HTML redirect (e.g., to login page)
+                        console.log('Non-JSON response, status:', response.status);
+                        if (response.status === 401 || response.status === 403) {
+                            throw new Error(translations.loginRequired);
+                        }
+                        throw new Error('Unexpected response format');
                     }
-                    return response.json();
                 })
                 .then(data => {
                     console.log('Submit response data:', data);
@@ -292,12 +317,12 @@
                         // Show success message
                         showAlert('success', data.message);
                     } else {
-                        showAlert('danger', data.error || 'An error occurred');
+                        showAlert('danger', data.error || translations.errorOccurred);
                     }
                 })
                 .catch(error => {
                     console.error('Error submitting review:', error);
-                    showAlert('danger', 'An error occurred while submitting your review: ' + error.message);
+                    showAlert('danger', error.message);
                 })
                 .finally(() => {
                     // Re-enable button

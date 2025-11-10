@@ -55,7 +55,7 @@
                                             <label class="block text-sm font-medium mb-2 text-black">💰
                                                 {{ __('Price from') }}</label>
                                             <input type="number" name="price_from" value="{{ request('price_from') }}"
-                                                placeholder="{{ __('from') }} {{ $priceRange['min'] }} ₽"
+                                                placeholder="{{ __('from') }} {{ $priceRange['min'] }} {{ \App\Helpers\TranslationHelper::getCurrencySymbol() }}"
                                                 class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 border-0 focus:ring-2 focus:ring-blue-500">
                                         </div>
 
@@ -64,7 +64,7 @@
                                             <label class="block text-sm font-medium mb-2 text-black">💸
                                                 {{ __('Price to') }}</label>
                                             <input type="number" name="price_to" value="{{ request('price_to') }}"
-                                                placeholder="{{ __('to') }} {{ $priceRange['max'] }} ₽"
+                                                placeholder="{{ __('to') }} {{ $priceRange['max'] }} {{ \App\Helpers\TranslationHelper::getCurrencySymbol() }}"
                                                 class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 border-0 focus:ring-2 focus:ring-blue-500">
                                         </div>
                                     </div>

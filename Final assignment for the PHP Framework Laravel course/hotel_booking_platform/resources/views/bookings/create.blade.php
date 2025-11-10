@@ -31,29 +31,31 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Check-in Date -->
                             <div>
-                                <label for="started_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {{ __('booking.check_in_date') }}
+                                <label for="started_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    📅 {{ __('booking.check_in_date') }}
                                 </label>
                                 <input type="date" id="started_at" name="started_at" value="{{ old('started_at') }}"
                                     min="{{ date('Y-m-d', strtotime('+1 day')) }}"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200 date-input"
+                                    data-placeholder="{{ __('booking.select_check_in_date') }}"
                                     required>
                                 @error('started_at')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <!-- Check-out Date -->
                             <div>
-                                <label for="finished_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {{ __('booking.check_out_date') }}
+                                <label for="finished_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    📅 {{ __('booking.check_out_date') }}
                                 </label>
                                 <input type="date" id="finished_at" name="finished_at" value="{{ old('finished_at') }}"
                                     min="{{ date('Y-m-d', strtotime('+2 days')) }}"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200 date-input"
+                                    data-placeholder="{{ __('booking.select_check_out_date') }}"
                                     required>
                                 @error('finished_at')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
@@ -61,33 +63,33 @@
                         <!-- Guests -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                             <div>
-                                <label for="adults" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {{ __('booking.adults') }}
+                                <label for="adults" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    👥 {{ __('booking.adults') }}
                                 </label>
                                 <select id="adults" name="adults"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200">
                                     @for($i = 1; $i <= 6; $i++)
                                         <option value="{{ $i }}" {{ old('adults', 1) == $i ? 'selected' : '' }}>{{ $i }}</option>
                                     @endfor
                                 </select>
                                 @error('adults')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <div>
-                                <label for="children" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    {{ __('booking.children') }}
+                                <label for="children" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    👶 {{ __('booking.children') }}
                                 </label>
                                 <select id="children" name="children"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white">
+                                    class="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 transition-all duration-200">
                                     @for($i = 0; $i <= 4; $i++)
                                         <option value="{{ $i }}" {{ old('children', 0) == $i ? 'selected' : '' }}>{{ $i }}
                                         </option>
                                     @endfor
                                 </select>
                                 @error('children')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
@@ -134,6 +136,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script>
         var selectDatesText = '{{ __("booking.select_dates") }}';
@@ -190,6 +194,31 @@
             endDateInput.addEventListener('change', calculatePrice);
             adultsInput.addEventListener('change', calculatePrice);
             childrenInput.addEventListener('change', calculatePrice);
+            
+            // Handle date input placeholders
+            const dateInputs = document.querySelectorAll('.date-input');
+            dateInputs.forEach(input => {
+                // Set initial state
+                if (!input.value) {
+                    input.setAttribute('data-empty', 'true');
+                }
+                
+                input.addEventListener('input', function() {
+                    if (this.value) {
+                        this.removeAttribute('data-empty');
+                    } else {
+                        this.setAttribute('data-empty', 'true');
+                    }
+                });
+                
+                input.addEventListener('change', function() {
+                    if (this.value) {
+                        this.removeAttribute('data-empty');
+                    } else {
+                        this.setAttribute('data-empty', 'true');
+                    }
+                });
+            });
         });
     </script>
 @endsection
