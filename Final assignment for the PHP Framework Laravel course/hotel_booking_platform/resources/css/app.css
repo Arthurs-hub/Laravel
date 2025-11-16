@@ -1,0 +1,303 @@
+/* stylelint-disable at-rule-no-unknown */
+/* Allow Tailwind directives when using PostCSS/Tailwind */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+/* stylelint-enable at-rule-no-unknown */
+
+/* Адаптивные стили для всех устройств */
+@layer utilities {
+
+    /* Отключение hover эффектов на мобильных устройствах */
+    @media (hover: none) and (pointer: coarse) {
+        .hover-scale:hover {
+            transform: none !important;
+        }
+
+        .hover-shadow:hover {
+            box-shadow: none !important;
+        }
+
+        .hover-brightness:hover {
+            filter: none !important;
+        }
+
+        /* Отключение увеличения изображений на мобильных */
+        .hotel-image:hover,
+        .room-image:hover {
+            transform: none !important;
+        }
+    }
+
+    /* Улучшенная адаптивность для мобильных устройств */
+    @media (max-width: 768px) {
+        .mobile-padding {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        .mobile-text-sm {
+            font-size: 0.875rem !important;
+        }
+
+        .mobile-gap-2 {
+            gap: 0.5rem !important;
+        }
+
+        /* Компактные кнопки на мобильных */
+        .mobile-btn {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+        }
+
+        /* Адаптивная сетка */
+        .mobile-grid-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+        }
+    }
+
+    /* Планшеты */
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .tablet-grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+
+        .tablet-padding {
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+        }
+    }
+
+    /* Десктоп */
+    @media (min-width: 1024px) {
+        .desktop-grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+
+        .desktop-padding {
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+    }
+
+    /* Большие экраны */
+    @media (min-width: 1280px) {
+        .xl-grid-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        }
+    }
+
+    /* --- fixes for linter compatibility (vendor prefixes + standard props) --- */
+
+    /* Ensure standard appearance follows vendor-prefixed ones */
+    input,
+    textarea,
+    select,
+    button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    /* Safe line-clamp helper: keep -webkit- prefixed + standard property */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        overflow: hidden;
+    }
+
+    /* Images/videos: make block-level but remove vertical-align (linters complain) */
+    img,
+    video {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        /* vertical-align intentionally omitted for block elements */
+    }
+
+    /* If inline alignment is needed, use explicit inline-block helper */
+    .inline-middle {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Override Tailwind .pt-20 to 0 */
+    .pt-20 {
+        padding-top: 0 !important;
+    }
+
+    /* small helper to force dropdown content shrink-to-fit if needed */
+    .dropdown-shrink {
+        width: max-content;
+        /* fallback for browsers without Tailwind w-max */
+        white-space: nowrap;
+    }
+
+    /* Force dropdown to shrink to content and prevent child items from stretching */
+    .dropdown-shrink {
+        display: inline-block;
+        width: auto;
+        max-width: max-content;
+        white-space: nowrap;
+        /* prevent wrapping that expands height/width */
+    }
+
+    /* wrapper that holds visual panel (inside .dropdown-shrink) */
+    .dropdown-shrink>.rounded-md {
+        display: inline-block;
+        width: auto;
+    }
+
+    /* Prevent links/buttons inside dropdown from being full-width */
+    .dropdown-shrink a,
+    .dropdown-shrink button {
+        display: inline-flex !important;
+        /* keep icon+label alignment but not full width */
+        align-items: center;
+        width: auto !important;
+        white-space: nowrap !important;
+        /* keep text on one line */
+        padding-left: 0.75rem !important;
+        /* keep comfortable paddings, adapt if needed */
+        padding-right: 0.75rem !important;
+    }
+
+    /* If some utility forces w-full on descendants, override it */
+    .dropdown-shrink .w-full {
+        width: auto !important;
+    }
+
+    /* If some rule uses display:block; vertical centering use inline-flex override */
+    .dropdown-shrink .block {
+        display: inline-flex !important;
+    }
+
+    /* Fallback for browsers without max-content support */
+    @supports not (width: max-content) {
+        .dropdown-shrink {
+            display: inline-block;
+        }
+    }
+
+    /* Fixed width for language button + dropdown panel = 3.4cm */
+    .language-button {
+        width: 3.4cm;
+        min-width: 3.4cm;
+        max-width: 3.4cm;
+        display: inline-flex;
+        justify-content: space-between;
+        /* keep label and caret spaced */
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    /* Ensure dropdown panel matches button width */
+    .language-dropdown {
+        /* place absolute block but don't force content wider */
+        min-width: 3.4cm;
+        width: 3.4cm;
+    }
+
+    /* Keep inner content stacked and padded */
+    .dropdown-shrink {
+        display: block;
+        width: 100%;
+        white-space: normal;
+    }
+
+    .dropdown-shrink .py-1 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dropdown-shrink a,
+    .dropdown-shrink button {
+        display: inline-flex !important;
+        width: 100% !important;
+        /* fill the 3.4cm panel but respect content padding */
+        box-sizing: border-box;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        justify-content: flex-start;
+        border-radius: 0.375rem;
+    }
+
+    /* If any descendant has w-full class, allow it (we want column full of 3.4cm) */
+    .language-dropdown .w-full {
+        width: 100% !important;
+    }
+
+    /* fixed width for user dropdown (4.7 cm) */
+    .user-width {
+        width: 4.7cm;
+        min-width: 4.7cm;
+        max-width: 4.7cm;
+        box-sizing: border-box;
+    }
+
+    /* ensure inner content fills the fixed panel */
+    .user-width>.rounded-md {
+        width: 100%;
+        display: block;
+    }
+
+    .user-width a,
+    .user-width button {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Date input styles */
+    .date-input {
+        position: relative;
+    }
+    
+    .date-input::-webkit-calendar-picker-indicator {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        opacity: 0.7;
+        width: 20px;
+        height: 20px;
+    }
+    
+    .date-input::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+    
+    .date-input:invalid {
+        color: #9CA3AF;
+    }
+    
+    .date-input:invalid::-webkit-datetime-edit {
+        color: transparent;
+    }
+    
+    .date-input:invalid::before {
+        content: attr(data-placeholder);
+        color: #9CA3AF;
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 1.125rem;
+        z-index: 1;
+    }
+    
+    .date-input:focus:invalid::before,
+    .date-input:valid::before {
+        display: none;
+    }
+    
+    /* Hide duplicate calendar icons */
+    .date-input::-webkit-inner-spin-button,
+    .date-input::-webkit-clear-button {
+        display: none;
+    }
+
+}
