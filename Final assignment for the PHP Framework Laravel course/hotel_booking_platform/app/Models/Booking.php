@@ -1,10 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Модель бронирования
+ * 
+ * Представляет бронирование комнаты пользователем
+ */
 class Booking extends Model
 {
     use HasFactory;
@@ -34,17 +43,32 @@ class Booking extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function user()
+    /**
+     * Получает пользователя, сделавшего бронирование
+     * 
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function room()
+    /**
+     * Получает забронированную комнату
+     * 
+     * @return BelongsTo
+     */
+    public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function getTotalPriceAttribute()
+    /**
+     * Вычисляет общую стоимость бронирования
+     * 
+     * @return int|null
+     */
+    public function getTotalPriceAttribute(): ?int
     {
         if ($this->price) {
             return $this->price;
@@ -62,16 +86,31 @@ class Booking extends Model
         return null;
     }
 
-    public function getFormattedPriceAttribute()
+    /**
+     * Возвращает отформатированную стоимость
+     * 
+     * @return string
+     */
+    public function getFormattedPriceAttribute(): string
     {
         return number_format($this->price, 0, ',', ' ') . ' ₽';
     }
 
-    public function review()
+    /**
+     * Получает отзыв к бронированию
+     * 
+     * @return HasOne
+     */
+    public function review(): HasOne
     {
         return $this->hasOne(Review::class);
     }
 
+    /**
+     * Проверяет, можно ли оставить отзыв
+     * 
+     * @return bool
+     */
     public function canReview(): bool
     {
         return $this->finished_at < now() && !$this->review;

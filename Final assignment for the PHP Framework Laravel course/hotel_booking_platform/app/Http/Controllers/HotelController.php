@@ -1,15 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Hotel;
+use App\Services\HotelService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 
+/**
+ * Контроллер для управления отелями
+ * 
+ * Обрабатывает HTTP запросы для просмотра списка отелей и детальной информации
+ */
 class HotelController extends Controller
 {
+    /**
+     * @param HotelService $hotelService Сервис для работы с отелями
+     */
+    public function __construct(
+        private readonly HotelService $hotelService
+    ) {}
 
+    /**
+     * Отображает список отелей с фильтрацией
+     * 
+     * @param Request $request HTTP запрос с параметрами фильтрации
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $applyFilters = function ($builder) use ($request) {
@@ -108,6 +128,13 @@ class HotelController extends Controller
     }
 
 
+    /**
+     * Отображает детальную информацию об отеле
+     * 
+     * @param Hotel $hotel Модель отеля
+     * @param Request $request HTTP запрос
+     * @return \Illuminate\View\View
+     */
     public function show(Hotel $hotel, Request $request)
     {
         $hotel->load(['rooms.facilities', 'facilities', 'reviews.user']);

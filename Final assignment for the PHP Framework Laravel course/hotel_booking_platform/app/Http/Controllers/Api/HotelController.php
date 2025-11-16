@@ -1,15 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Hotel;
+use App\Services\HotelService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+/**
+ * API контроллер для управления отелями
+ * 
+ * Предоставляет REST API для получения информации об отелях
+ */
 class HotelController extends Controller
 {
+    /**
+     * @param HotelService $hotelService Сервис для работы с отелями
+     */
+    public function __construct(
+        private readonly HotelService $hotelService
+    ) {}
    
+    /**
+     * Получает список отелей с фильтрацией
+     * 
+     * @param Request $request HTTP запрос с параметрами фильтрации
+     * @return JsonResponse JSON ответ со списком отелей
+     */
     public function index(Request $request): JsonResponse
     {
         $sort = $request->get('sort', 'default');
@@ -110,6 +130,12 @@ class HotelController extends Controller
     }
 
  
+    /**
+     * Получает детальную информацию об отеле
+     * 
+     * @param Hotel $hotel Модель отеля
+     * @return JsonResponse JSON ответ с информацией об отеле
+     */
     public function show(Hotel $hotel): JsonResponse
     {
         $hotel->load(['manager', 'facilities', 'rooms.facilities', 'reviews']);
@@ -121,6 +147,11 @@ class HotelController extends Controller
     }
 
 
+    /**
+     * Получает список доступных стран
+     * 
+     * @return JsonResponse JSON ответ со списком стран
+     */
     public function countries(): JsonResponse
     {
         $countries = Hotel::select('country')
