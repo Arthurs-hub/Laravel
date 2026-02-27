@@ -1,9 +1,9 @@
 <div {{ $attributes->merge(['class' => 'flex flex-col md:flex-row shadow-md']) }}>
     <div class="h-full w-full md:w-2/5">
         <img class="h-20 w-full object-cover"
-            src="{{ $room->poster_url ?: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=960&q=80&auto=format&fit=crop' }}"
-            alt="{{ $room->title ?? $room->name }}"
-            onerror="this.onerror=null;this.src='https://via.placeholder.com/960x640.png?text=Room';">
+            src="{{ $room->poster_url }}"
+            crossorigin="anonymous"
+            alt="{{ $room->title ?? $room->name }}">
     </div>
     <div class="p-4 w-full md:w-3/5 flex flex-col justify-between">
         <div class="pb-2">

@@ -101,8 +101,8 @@ class BookingService
                 $room,
                 $startDate,
                 $endDate,
-                $data['adults'] ?? 1,
-                $data['children'] ?? 0
+                (int) ($data['adults'] ?? 1),
+                (int) ($data['children'] ?? 0)
             );
 
             $booking = Booking::create([
@@ -146,8 +146,8 @@ class BookingService
                 $booking->room,
                 $startDate,
                 $endDate,
-                $data['adults'] ?? 1,
-                $data['children'] ?? 0
+                (int) ($data['adults'] ?? 1),
+                (int) ($data['children'] ?? 0)
             );
 
             $booking->update([

@@ -22,7 +22,6 @@ class ImageHelper
             }
         }
         
-        // For new hotels not in config, use Unsplash
         return config('images.fallback.hotel');
     }
     
@@ -43,7 +42,6 @@ class ImageHelper
             }
         }
         
-        // For new rooms not in config, use Unsplash
         return config('images.fallback.room');
     }
     
