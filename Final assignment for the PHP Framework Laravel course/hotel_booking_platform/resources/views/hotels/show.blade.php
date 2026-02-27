@@ -9,7 +9,7 @@
                     <!-- Фото отеля - абсолютное позиционирование справа -->
                     <div class="hidden lg:block absolute right-0 top-0 z-10">
                         <img class="w-auto object-cover rounded-lg shadow-md" src="{{ $hotel->poster_url }}"
-                            crossorigin="anonymous"
+                            referrerpolicy="no-referrer"
                             alt="{{ $hotel->title }}" style="height: 6cm;">
                     </div>
 
@@ -57,7 +57,7 @@
                     <!-- Фото отеля для мобильных -->
                     <div class="lg:hidden mt-6">
                         <img class="w-full object-cover rounded-lg shadow-md" src="{{ $hotel->poster_url }}"
-                            crossorigin="anonymous"
+                            referrerpolicy="no-referrer"
                             alt="{{ $hotel->title }}" style="max-height: 300px;">
                     </div>
                 </div>

@@ -2,7 +2,7 @@
     <div class="h-full w-full md:w-2/5">
         <img class="h-20 w-full object-cover"
             src="{{ $room->poster_url }}"
-            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
             alt="{{ $room->title ?? $room->name }}">
     </div>
     <div class="p-4 w-full md:w-3/5 flex flex-col justify-between">

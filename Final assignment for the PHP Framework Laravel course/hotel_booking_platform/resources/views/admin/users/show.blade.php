@@ -7,7 +7,7 @@
                 <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
                         @if($user->avatar)
-                            <img class="h-16 w-16 rounded-full" src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->full_name }}">
+                            <img class="h-16 w-16 rounded-full" src="{{ asset('storage/' . $user->avatar) }}" referrerpolicy="no-referrer" alt="{{ $user->full_name }}">
                         @else
                             <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
                                 <span class="text-xl font-medium text-gray-700">{{ substr($user->full_name, 0, 1) }}</span>

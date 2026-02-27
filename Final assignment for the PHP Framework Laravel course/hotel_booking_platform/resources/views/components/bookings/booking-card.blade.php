@@ -19,7 +19,7 @@
         </div>
         <div class="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:space-x-6 w-full">
             <div class="pb-4 w-full md:w-2/5">
-                <img class="w-full block" src="{{ $booking->room->poster_url }}" crossorigin="anonymous" alt="image" />
+                <img class="w-full block" src="{{ $booking->room->poster_url }}" referrerpolicy="no-referrer" alt="image" />
             </div>
             <div
                 class="md:flex-row flex-col flex justify-between items-start w-full md:w-3/5 pb-8 space-y-4 md:space-y-0">

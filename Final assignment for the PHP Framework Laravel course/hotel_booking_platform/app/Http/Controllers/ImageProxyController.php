@@ -7,41 +7,23 @@ use Illuminate\Support\Facades\Http;
 
 class ImageProxyController extends Controller
 {
-    public function show($fileId)
+    public function proxy($fileId)
     {
-        // Check cache first
-        $cacheKey = 'image_' . $fileId;
-        $cached = \Cache::get($cacheKey);
-        
-        if ($cached) {
-            return response($cached['body'])
-                ->header('Content-Type', $cached['type'])
-                ->header('Cache-Control', 'public, max-age=31536000');
-        }
-        
-        $url = "https://drive.google.com/uc?export=download&id={$fileId}";
+        $url = "https://drive.google.com/uc?export=view&id={$fileId}";
         
         try {
-            $response = Http::withoutVerifying()
-                ->timeout(5)
-                ->withHeaders(['User-Agent' => 'Mozilla/5.0'])
-                ->get($url);
+            $response = Http::withOptions(['verify' => false])->timeout(5)->get($url);
             
-            if ($response->successful() && strpos($response->header('Content-Type'), 'image') !== false) {
-                $body = $response->body();
-                $type = $response->header('Content-Type');
-                
-                // Cache for 7 days
-                \Cache::put($cacheKey, ['body' => $body, 'type' => $type], 604800);
-                
-                return response($body)
-                    ->header('Content-Type', $type)
-                    ->header('Cache-Control', 'public, max-age=31536000');
+            if ($response->successful()) {
+                return response($response->body())
+                    ->header('Content-Type', $response->header('Content-Type') ?? 'image/jpeg')
+                    ->header('Cache-Control', 'public, max-age=86400');
             }
         } catch (\Exception $e) {
-            \Log::error("Image proxy error for {$fileId}: " . $e->getMessage());
+            // Return 1x1 transparent pixel on error
         }
         
-        return redirect('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400');
+        $pixel = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==');
+        return response($pixel)->header('Content-Type', 'image/png');
     }
 }

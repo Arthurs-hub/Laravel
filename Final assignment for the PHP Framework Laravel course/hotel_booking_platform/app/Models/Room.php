@@ -21,7 +21,7 @@ class Room extends Model
         'price',
     ];
 
-    public function getImageUrlAttribute($value)
+    public function getPosterUrlAttribute($value)
     {
         if (!empty($value)) {
             return $value;
@@ -45,7 +45,7 @@ class Room extends Model
         $hotelSlug = trim($hotelSlug, '_');
 
         // Get room number based on room position within hotel (1-5)
-        $roomsInHotel = Room::where('hotel_id', $hotel->id)->orderBy('id')->pluck('id')->toArray();
+        $roomsInHotel = Room::where('hotel_id', $this->hotel_id)->orderBy('id')->pluck('id')->toArray();
         $roomPosition = array_search($this->id, $roomsInHotel);
         $roomNumber = ($roomPosition !== false) ? ($roomPosition + 1) : 1;
         
@@ -53,6 +53,11 @@ class Room extends Model
         $roomNumber = (($roomNumber - 1) % 5) + 1;
 
         return ImageHelper::getRoomImage($countryFolder, $hotelSlug, $roomNumber);
+    }
+
+    public function getImageUrlAttribute($value)
+    {
+        return $this->getPosterUrlAttribute($value);
     }
 
     public function hotel()

@@ -56,10 +56,12 @@
                                             @if($review->user->avatar)
                                                 <img class="h-10 w-10 rounded-full object-cover"
                                                      src="{{ asset('storage/' . $review->user->avatar) }}"
+                                                     referrerpolicy="no-referrer"
                                                      alt="{{ $review->user->full_name }}">
                                             @else
                                                 <img class="h-10 w-10 rounded-full"
                                                      src="https://ui-avatars.com/api/?name={{ urlencode($review->user->full_name) }}&color=7F9CF5&background=EBF4FF"
+                                                     referrerpolicy="no-referrer"
                                                      alt="{{ $review->user->full_name }}">
                                             @endif
                                         </div>

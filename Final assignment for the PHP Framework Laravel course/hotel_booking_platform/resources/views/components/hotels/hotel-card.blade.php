@@ -10,7 +10,7 @@
                     style="max-height: 100%; width: auto;" 
                     src="{{ $hotel->poster_url }}"
                     loading="lazy"
-                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
                     alt="{{ $hotel->title }}">
             </div>
 
@@ -27,7 +27,7 @@
                 <img class="w-full h-full object-contain hotel-image" style="max-height: 100%; width: auto;"
                     src="{{ $hotel->poster_url }}"
                     loading="lazy"
-                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
                     alt="{{ $hotel->title }}">
             </div>
 

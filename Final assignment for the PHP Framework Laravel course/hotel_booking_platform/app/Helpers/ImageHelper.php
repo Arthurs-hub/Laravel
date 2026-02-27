@@ -58,8 +58,6 @@ class ImageHelper
     {
         $images = config('images.rooms');
         $baseUrl = config('images.google_drive.base_url');
-        $baseUrl = str_replace('&amp;', '&', $baseUrl);
-        
         $roomImages = [];
         
         if (isset($images[$country][$hotelSlug])) {

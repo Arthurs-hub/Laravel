@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
 Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('hotels.show');
-Route::get('/image-proxy/{fileId}', [ImageProxyController::class, 'show'])->name('image.proxy');
+Route::get('/proxy/image/{fileId}', [ImageProxyController::class, 'proxy'])->name('image.proxy');
 
 
 use App\Http\Controllers\Auth\CustomRegistrationController;

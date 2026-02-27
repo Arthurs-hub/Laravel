@@ -28,7 +28,7 @@
                                 <div class="shrink-0">
                                     @if($user->avatar)
                                         <img class="h-20 w-20 object-cover rounded-full"
-                                            src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar">
+                                            src="{{ asset('storage/' . $user->avatar) }}" referrerpolicy="no-referrer" alt="Avatar">
                                     @else
                                         <div class="h-20 w-20 bg-gray-300 rounded-full flex items-center justify-center">
                                             <span class="text-gray-600 text-2xl">{{ substr($user->full_name, 0, 1) }}</span>

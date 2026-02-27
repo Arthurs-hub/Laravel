@@ -33,13 +33,13 @@
                 <img class="w-full h-full object-contain transition-transform duration-300 room-image"
                     style="max-height: 100%; width: auto;" 
                     src="{!! $roomPhotos[0] !!}"
-                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
                     alt="{{ $room->title }}">
             @else
                 <img class="w-full h-full object-contain transition-transform duration-300 room-image"
                     style="max-height: 100%; width: auto;" 
                     src="{!! $room->image_url !!}"
-                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer"
                     alt="{{ $room->title }}">
             @endif
         </div>

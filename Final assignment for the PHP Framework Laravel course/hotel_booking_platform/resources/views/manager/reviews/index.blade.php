@@ -65,6 +65,7 @@
                                                         @if($review->user->avatar)
                                                             <img src="{{ asset('storage/' . $review->user->avatar) }}"
                                                                 alt="{{ $review->user->full_name }}" class="rounded-circle me-2"
+                                                                referrerpolicy="no-referrer"
                                                                 width="32" height="32">
                                                         @else
                                                             <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2"
