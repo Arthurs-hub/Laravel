@@ -79,6 +79,7 @@
                                             </p>
                                         </div>
                                         <img src="{{ $room->poster_url }}" alt="{{ $room->title }}"
+                                            crossorigin="anonymous"
                                             class="w-16 h-16 rounded-lg object-cover">
                                     </div>
                                 </div>
@@ -92,6 +93,7 @@
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('admin.image') }}</h2>
                         <img src="{{ $hotel->poster_url }}" alt="{{ $hotel->title }}"
+                            crossorigin="anonymous"
                             class="w-full rounded-lg object-cover">
                     </div>
 

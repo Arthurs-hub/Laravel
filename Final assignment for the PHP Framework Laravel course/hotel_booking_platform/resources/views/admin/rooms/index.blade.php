@@ -47,7 +47,9 @@
                                     <td class="px-6 py-4" style="width: 280px;">
                                         <div class="flex items-center">
                                             <img class="h-10 w-10 rounded-lg object-cover flex-shrink-0"
-                                                src="{{ $room->poster_url }}" alt="{{ $room->title }}">
+                                                src="{{ $room->poster_url }}" 
+                                                crossorigin="anonymous"
+                                                alt="{{ $room->title }}">
                                             <div class="ml-3 min-w-0 overflow-hidden">
                                                 <div class="text-sm font-medium text-gray-900 break-words leading-tight"
                                                     title="{{ \App\Helpers\TranslationHelper::translateRoomType($room->type) }}">{{ \App\Helpers\TranslationHelper::translateRoomType($room->type) }}</div>
